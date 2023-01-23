@@ -24,6 +24,8 @@ use App\Http\Controllers\Master\TicketMasterController;
 use App\Http\Controllers\Master\LinkController AS LinkMasterController;
 use App\Http\Controllers\Dashboard\StudentsDashboardController;
 use App\Http\Controllers\Dashboard\TeacherDashboardController;
+use App\Http\Controllers\Student\LinkStudentController;
+use App\Http\Controllers\CrudController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -36,6 +38,14 @@ use App\Http\Controllers\Dashboard\TeacherDashboardController;
 */
 
 Route::prefix('v1')->group(function (){
+
+    Route::prefix('crud')->controller(CrudController::class)->group(function () {
+        Route::get('read', 'index');
+        Route::get('show-by-id/{id}', 'showById');
+        Route::post('create', 'store');
+        Route::put('update/{crud}', 'update');
+        Route::delete('delete/{crud}', 'destroy');
+    });
 
     Route::prefix('/visitor')->group(function (){
         Route::post('contact', [ContactController::class, 'store']);
@@ -66,6 +76,13 @@ Route::prefix('v1')->group(function (){
                 Route::post('update', 'update');
                 Route::get('get-by-user_id/{id}', 'show');
                 Route::get('get-show-student-audio-id/{id}', 'showStudentsAudioId');
+            });
+
+            Route::prefix('link')->controller(LinkStudentController::class)->group(function () {
+                Route::get('testeAction', 'testeAction');
+                Route::get('list/{id}', 'index');
+                Route::post('create', 'store');
+                Route::delete('delete/{studentLink}', 'destroy');
             });
 
             Route::prefix('ticket')->controller(TicketStudentController::class)->group(function () {
@@ -102,6 +119,8 @@ Route::prefix('v1')->group(function (){
             Route::delete('delete/{link}', 'destroy');
             Route::get('get-link/{link}', 'show');
             Route::put('update/{id}', 'update');
+
+            Route::get('testeAction', 'testeAction');
         });
 
         Route::prefix('videos')->controller(VideoController::class)->group(function () {
