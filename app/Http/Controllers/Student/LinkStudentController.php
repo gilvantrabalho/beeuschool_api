@@ -3,7 +3,10 @@
 namespace App\Http\Controllers\Student;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Requests\RegisterController;
+use App\Models\LastLinksAccessedStudent;
 use App\Models\Link;
+use App\Models\Student;
 use App\Models\StudentLink;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -82,5 +85,42 @@ class LinkStudentController extends Controller
         } catch (\Exception $e) {
             echo $e->getMessage();
         }
+    }
+
+    public function readLastLinksAccessed(Student $student) {
+        $lasts = LastLinksAccessedStudent::where('last_links_accessed_student.student_id', $student->id)
+            ->join('links AS l', 'l.id', '=', 'last_links_accessed_student.link_id')
+            ->orderBy('last_links_accessed_student.id', 'DESC')
+            ->get();
+        return response()->json([
+            'links' => $lasts
+        ]);
+    }
+
+    public function lastLinksAccessed(Request $request)
+    {
+        $verify = LastLinksAccessedStudent::whereLinkId($request->link_id)
+            ->whereStudentId($request->student_id)->first();
+
+        if ($verify) {
+            return response()->json([
+                'message' => 'Registro já cadastrado!'
+            ]);
+        }
+
+        if (LastLinksAccessedStudent::whereStudentId($request->student_id)->count() == 5) {
+            $last = LastLinksAccessedStudent::whereStudentId($request->student_id)->first();
+            LastLinksAccessedStudent::whereId($last->id)->delete();
+        }
+
+        return RegisterController::store(
+            new LastLinksAccessedStudent(),
+            $request,
+            ['student_id', 'link_id'],
+            [
+                'required',
+                'required'
+            ]
+        );
     }
 }

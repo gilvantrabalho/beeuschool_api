@@ -12,17 +12,14 @@ class ContactController extends Controller
 {
     public function store(Request $request): JsonResponse {
         try {
-
             $validator = Validator::make($request->only(['name', 'telephone', 'email', 'message']), [
                 'name' => 'required|string',
                 'telephone' => 'required|string',
                 'email' => 'email|string',
-                'message' => 'required|string'
             ], [
                 'name.required' => 'Nome é um campo obrigatório!',
                 'telephone.required' => 'Telefone é um campo obrigatório!',
                 'email.email' => 'O e-mail informado não é válido!',
-                'message.required' => 'Mensagem é um campo obrigatório!'
             ]);
 
             if ($validator->fails()) {
@@ -36,7 +33,7 @@ class ContactController extends Controller
                 'name' => $request->name,
                 'telephone' => $request->telephone,
                 'email' => $request->email,
-                'message' => $request->message,
+                'message' => $request->message ?? 'NULL',
                 'status' => 0
             ]);
             $user_contact->save();

@@ -71,11 +71,16 @@ Route::prefix('v1')->group(function (){
             Route::put('update/{id}', 'update');
             Route::delete('delete/{student}', 'delete');
 
+            Route::prefix('dashboard')->controller(StudentsDashboardController::class)->group(function () {
+                Route::get('showStudentPlan/{plan}', 'showStudentPlan');
+            });
+
             Route::prefix('audio')->controller(AudioController::class)->group(function () {
                 Route::post('send', 'store');
                 Route::post('update', 'update');
                 Route::get('get-by-user_id/{id}', 'show');
                 Route::get('get-show-student-audio-id/{id}', 'showStudentsAudioId');
+                Route::get('countAudios/{student}', 'countAudios');
             });
 
             Route::prefix('link')->controller(LinkStudentController::class)->group(function () {
@@ -83,6 +88,8 @@ Route::prefix('v1')->group(function (){
                 Route::get('list/{id}', 'index');
                 Route::post('create', 'store');
                 Route::delete('delete/{studentLink}', 'destroy');
+                Route::get('readLastLinksAccessed/{student}', 'readLastLinksAccessed');
+                Route::post('lastLinksAccessed', 'lastLinksAccessed');
             });
 
             Route::prefix('ticket')->controller(TicketStudentController::class)->group(function () {

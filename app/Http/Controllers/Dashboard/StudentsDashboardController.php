@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
+use App\Models\Plan;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -25,6 +26,12 @@ class StudentsDashboardController extends Controller
             ->get();
         return response()->json([
             'students' => $students
+        ]);
+    }
+
+    public function showStudentPlan(Plan $plan) {
+        return response()->json([
+            'plan' => $plan
         ]);
     }
 }

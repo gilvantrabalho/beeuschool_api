@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Student;
 
 use App\Http\Controllers\Controller;
+use App\Models\Student;
 use App\Models\StudentsAudio;
 use App\Models\StudentsAudioCorrections;
 use App\Repositories\StudentsAudioRepository;
@@ -12,6 +13,13 @@ use Illuminate\Support\Facades\Storage;
 
 class AudioController extends Controller
 {
+    public function countAudios(Student $student)
+    {
+        return response()->json([
+            'count_audios' => StudentsAudio::whereStudentId($student->id)->count()
+        ]);
+    }
+
     public function show(int $id): JsonResponse {
         try {
             return response()->json([
