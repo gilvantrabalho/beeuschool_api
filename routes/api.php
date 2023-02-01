@@ -39,6 +39,10 @@ use App\Http\Controllers\CrudController;
 
 Route::prefix('v1')->group(function (){
 
+    Route::get('/teste_storage', function() {
+        return storage_path();
+    });
+
     Route::prefix('crud')->controller(CrudController::class)->group(function () {
         Route::get('read', 'index');
         Route::get('show-by-id/{id}', 'showById');
